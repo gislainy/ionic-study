@@ -6,13 +6,15 @@ import { MyApp } from './app.component';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { PageList } from './app.permission';
+import { pode } from './app.permission';
 
+const PageList = pode('userRamonId')
+debugger
+
+const componetes = PageList.map(p => p.component);
+componetes.push(MyApp)
 @NgModule({
-  declarations: [
-    MyApp,
-    ...PageList.map(p => p.component)
-  ],
+  declarations: componetes,
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp, {}, {
@@ -20,10 +22,7 @@ import { PageList } from './app.permission';
     }),
   ],
   bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp,
-    ...PageList.map(p => p.component)
-  ],
+  entryComponents:componetes,
   providers: [
     StatusBar,
     SplashScreen,

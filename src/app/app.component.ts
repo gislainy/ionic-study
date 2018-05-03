@@ -4,8 +4,17 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
 
+import { pode } from './app.permission';
+
+const PageList = pode('userRamonId');
+
+const pages = PageList.map(p => {
+  return {
+    title: p.name,
+    component: p.component
+  }
+});
 @Component({
   templateUrl: 'app.html'
 })
@@ -20,10 +29,7 @@ export class MyApp {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
-    this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'List', component: ListPage }
-    ];
+    this.pages = pages;
 
   }
 

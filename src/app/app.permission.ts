@@ -36,13 +36,85 @@ const PageList = [
     component: ListPage,
     segment: "list",
     name: "list",
+    rules: ["qualquerUsuarioLogado"]
+  },
+  {
+    component: AcomodacaoAddPage,
+    segment: "acomodacao-add",
+    name: "Adicinar Acomodacão",
+    rules: ["recepcao"]
+  },
+  {
+    component: AcomodacaoEditPage,
+    segment: "acomodacao-add",
+    name: "Editar Acomodacão",
+    rules: ["recepcao"]
+  },
+  {
+    component: AcomodacaoListPage,
+    segment: "acomodacao-list",
+    name: "Listagem de Acomodacão",
+    rules: ["recepcao"]
+  },
+  {
+    component: ReservaListPage,
+    segment: "reserva-list",
+    name: "Listagem de Reserva",
+    rules: ["recepcao"]
+  },
+  {
+    component: ReservaAddPage,
+    segment: "reserva-add",
+    name: "Adicionar Reserva",
+    rules: ["recepcao"]
+  },
+  {
+    component: ReservaEditPage,
+    segment: "reserva-edit",
+    name: "Editar Reserva",
+    rules: ["recepcao"]
+  },
+  {
+    component: ReservaConfirmPage,
+    segment: "reserva-confirm",
+    name: "Confirmar Reserva",
     rules: ["gerente"]
   },
   {
-    component: ListPage,
-    segment: "list",
-    name: "list",
-    rules: ["gerente"]
+    component: FinanceiroListPage,
+    segment: "financeiro-list",
+    name: "Listagem Financeiro",
+    rules: ["gerente", "financeiro"]
+  },
+  {
+    component: FinanceiroDespesaAddPage,
+    segment: "financeiro-despesa-add",
+    name: "Adicioanar Despesa Financeiro",
+    rules: ["gerente", "financeiro"]
+  },
+  {
+    component: FinanceiroReceitaAddPage,
+    segment: "financeiro-receita-add",
+    name: "Adicionar Receita Financeiro",
+    rules: ["gerente", "financeiro"]
+  },
+  {
+    component: UsuarioListPage,
+    segment: "usuario-list",
+    name: "Listagem de Usuario",
+    rules: ["gerente", "financeiro", "administrador"]
+  },
+  {
+    component: UsuarioAddPage,
+    segment: "usuario-add",
+    name: "Adicionar Usuario",
+    rules: ["administrador"]
+  },
+  {
+    component: UsuarioEditPage,
+    segment: "usuario-edit",
+    name: "Editar Usuario",
+    rules: ["administrador"]
   },
 ];
 
@@ -69,27 +141,60 @@ const userList = [
     email: 'marcellovcs@gmail.com',
     roles: ["recepcao"]
   },
+  {
+    _id: 'userRamonId',
+    email: 'ramonhenrique@gmail.com',
+    roles: ["gerente", "financeiro"]
+  },
 ];
 
 const rolesGroup = {
   gerente: [
-    "financeiro",
-    "repca"
+    "gerente",
+    "recepcao"
   ],
   administrador: [
-
+    "gerente",
+    "financeiro",
+    "administrador",
+    "recepcao",
   ],
   recepcao: [
-
+    "recepcao",
+  ],
+  financeiro: [
+    "financeiro"
   ]
 }
 
 
-function pode(userId: string, rules: Array<string>): Array<IPageList> {
-
-  return PageList;
+function pode(userId: string): Array<IPageList> {
+  debugger
+  const user = userList.filter(u => u._id === userId)[0];
+  const permissoes = [];
+  Object.keys(rolesGroup).forEach(r => {
+    if (user.roles.some(_r => _r == r)) {
+      rolesGroup[r].forEach(_r => {
+        if (permissoes.every(p => _r != p))
+          permissoes.push(_r)
+      })
+    };
+  });
+  const hasPermissoesPages = [];
+  PageList.forEach(p => {
+    p.rules.some(r => {
+      if(r == "qualquerUsuarioLogado") {
+        hasPermissoesPages.push(p); 
+        return true;
+      } else if(permissoes.indexOf(r) >= 0) {
+        hasPermissoesPages.push(p); 
+        return true;
+      }
+    });
+  })
+  return hasPermissoesPages;
 }
 
 export {
-  PageList
+  pode
 }
