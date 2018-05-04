@@ -6,13 +6,16 @@ import { MyApp } from './app.component';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { pode } from './app.permission';
+import { menuList } from './app.permission';
 
-const PageList = pode('userRamonId')
-debugger
+import { PodeComponent } from '../components/pode/pode'
+import { TesteComponent } from '../components/teste/teste'
+const PageList = menuList('userJoseId')
 
 const componetes = PageList.map(p => p.component);
 componetes.push(MyApp)
+componetes.push(TesteComponent)
+componetes.push(PodeComponent)
 @NgModule({
   declarations: componetes,
   imports: [

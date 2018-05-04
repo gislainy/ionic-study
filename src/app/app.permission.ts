@@ -147,6 +147,7 @@ const userList = [
     roles: ["gerente", "financeiro"]
   },
 ];
+const userId_x = "userMarcelloId";
 
 const rolesGroup = {
   gerente: [
@@ -168,16 +169,15 @@ const rolesGroup = {
 }
 
 
-function pode(userId: string): Array<IPageList> {
-  debugger
-  const user = userList.filter(u => u._id === userId)[0];
+function menuList(userId: string): Array<IPageList> {
+  const user = userList.filter(u => u._id === userId_x)[0];
   const permissoes = [];
   Object.keys(rolesGroup).forEach(r => {
     if (user.roles.some(_r => _r == r)) {
       rolesGroup[r].forEach(_r => {
         if (permissoes.every(p => _r != p))
           permissoes.push(_r)
-      })
+      });
     };
   });
   const hasPermissoesPages = [];
@@ -195,6 +195,21 @@ function pode(userId: string): Array<IPageList> {
   return hasPermissoesPages;
 }
 
+function pode(userId: string, rules: Array<string>): Boolean {
+  const user = userList.filter(u => u._id === userId_x)[0];
+  const permissoes = [];
+  Object.keys(rolesGroup).forEach(r => {
+    if (user.roles.some(_r => _r == r)) {
+      rolesGroup[r].forEach(_r => {
+        if (permissoes.every(p => _r != p))
+          permissoes.push(_r)
+      })
+    };
+  });
+  return permissoes.some(p => rules.indexOf(p) >= 0)
+}
+
 export {
+  menuList,
   pode
 }

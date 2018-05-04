@@ -5,9 +5,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
 
-import { pode } from './app.permission';
+import { menuList } from './app.permission';
 
-const PageList = pode('userRamonId');
+const PageList = menuList('userJoseId');
 
 const pages = PageList.map(p => {
   return {
